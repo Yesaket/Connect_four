@@ -136,20 +136,18 @@ async function makeMove(col) {
             const data = await response.json();
             
             if (response.ok) {
-                // Find the row where the piece landed
-                let row;
-                for (let r = 0; r < ROWS; r++) {
-                    if (data.board[r][col] !== board[r][col]) {
-                        row = r;
-                        break;
-                    }
+                // Handle player's move
+                const playerRow = getNextOpenRow(col);
+                if (playerRow === null) {
+                    animationInProgress = false;
+                    return;
                 }
                 
-                // Animate player's piece
-                await animatePiece(col, row, 1);
-                board = data.board;
+                // Animate and update player's move
+                await animatePiece(col, playerRow, 1);
                 
                 if (data.gameOver) {
+                    board = data.board;
                     gameOver = true;
                     if (data.winner === 'player') {
                         statusText.textContent = 'Player 1 wins! ';
@@ -164,23 +162,18 @@ async function makeMove(col) {
                     // Add delay before AI move
                     await new Promise(resolve => setTimeout(resolve, AI_MOVE_DELAY));
                     
-                    // Find AI's move
+                    // Handle AI's move
                     const aiCol = data.aiMove;
-                    let aiRow;
-                    for (let r = 0; r < ROWS; r++) {
-                        if (data.board[r][aiCol] === 2) {
-                            aiRow = r;
-                            break;
-                        }
-                    }
+                    const aiRow = getNextOpenRow(aiCol);
                     
-                    // Animate AI's piece
+                    // Animate and update AI's move
                     await animatePiece(aiCol, aiRow, 2);
+                    board = data.board;
                     statusText.textContent = 'Your turn! (Red)';
                 }
             }
         } else {
-            // Two-player mode
+            // Two-player mode (unchanged)
             const row = getNextOpenRow(col);
             if (row === null) {
                 animationInProgress = false;
