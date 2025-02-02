@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Four</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Connect Four</h1>
+        
+        <!-- Mode Selection Screen -->
+        <div id="mode-selection" class="mode-selection">
+            <h2>Select Game Mode</h2>
+            <div class="mode-buttons">
+                <button id="ai-mode" class="mode-button">
+                    <span class="mode-icon">🤖</span>
+                    <span class="mode-title">vs AI</span>
+                    <span class="mode-desc">Play against our intelligent AI</span>
+                </button>
+                <button id="two-player-mode" class="mode-button">
+                    <span class="mode-icon">👥</span>
+                    <span class="mode-title">Two Players</span>
+                    <span class="mode-desc">Play against a friend</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="game-screen hidden">
+            <div class="game-info">
+                <p id="status">Your turn! (Red)</p>
+                <div class="button-group">
+                    <button id="reset-button">New Game</button>
+                    <button id="change-mode-button">Change Mode</button>
+                </div>
+            </div>
+            <canvas id="game-board"></canvas>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+</body>
+</html>
