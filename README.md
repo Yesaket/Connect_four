@@ -1,7 +1,7 @@
 # Connect Four Web Game
 
 ## Contributors
-- Yesaket
+- Yesake Teshale
 
 ## Project Overview
 A web-based implementation of the classic Connect Four game with an AI opponent. The game features a modern UI, smooth animations, and multiple AI difficulty levels.
