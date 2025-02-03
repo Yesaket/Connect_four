@@ -67,10 +67,10 @@ ai_col, _ = game.alpha_beta(5, float('-inf'), float('inf'), True)
 
 ## Development Time
 - Initial Implementation: ~4 hours
-- UI Improvements: ~2 hours
-- Animation Fixes: ~2 hours
+- UI Improvements: ~1 hours
+- Animation Fixes: ~1 hours
 - Testing Implementation: ~1 hour
-- Total: ~9 hours
+- Total: ~7 hours
 
 ## Running the Project
 1. Install dependencies:
