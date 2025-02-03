@@ -21,6 +21,8 @@ class ConnectFour:
         self.board[row][col] = piece
 
     def is_valid_location(self, col):
+        if col < 0 or col >= COLUMN_COUNT:
+            raise IndexError(f"Column {col} is out of bounds")
         return self.board[ROW_COUNT-1][col] == 0
 
     def get_next_open_row(self, col):
@@ -193,50 +195,56 @@ def reset():
 
 @app.route('/make_move', methods=['POST'])
 def make_move():
-    data = request.get_json()
-    col = data.get('column')
-    
-    if not game.is_valid_location(col):
-        return jsonify({'error': 'Invalid move'}), 400
-    
-    # Player move
-    row = game.get_next_open_row(col)
-    game.drop_piece(row, col, PLAYER_PIECE)
-    
-    # Check if player won
-    if game.winning_move(PLAYER_PIECE):
+    try:
+        data = request.get_json()
+        col = data.get('column')
+        
+        if not isinstance(col, int) or col < 0 or col >= COLUMN_COUNT:
+            return jsonify({'error': 'Invalid column number'}), 400
+            
+        if not game.is_valid_location(col):
+            return jsonify({'error': 'Column is full'}), 400
+            
+        # Player move
+        row = game.get_next_open_row(col)
+        game.drop_piece(row, col, PLAYER_PIECE)
+        
+        # Check if player won
+        if game.winning_move(PLAYER_PIECE):
+            return jsonify({
+                'board': game.board.tolist(),
+                'gameOver': True,
+                'winner': 'player'
+            })
+        
+        # AI move
+        ai_col, _ = game.alpha_beta(5, float('-inf'), float('inf'), True)
+        ai_row = game.get_next_open_row(ai_col)
+        game.drop_piece(ai_row, ai_col, AI_PIECE)
+        
+        # Check if AI won
+        if game.winning_move(AI_PIECE):
+            return jsonify({
+                'board': game.board.tolist(),
+                'gameOver': True,
+                'winner': 'ai'
+            })
+        
+        # Check for draw
+        if len(game.get_valid_locations()) == 0:
+            return jsonify({
+                'board': game.board.tolist(),
+                'gameOver': True,
+                'winner': 'draw'
+            })
+        
         return jsonify({
             'board': game.board.tolist(),
-            'gameOver': True,
-            'winner': 'player'
+            'gameOver': False,
+            'aiMove': ai_col
         })
-    
-    # AI move
-    ai_col, _ = game.alpha_beta(5, float('-inf'), float('inf'), True)
-    ai_row = game.get_next_open_row(ai_col)
-    game.drop_piece(ai_row, ai_col, AI_PIECE)
-    
-    # Check if AI won
-    if game.winning_move(AI_PIECE):
-        return jsonify({
-            'board': game.board.tolist(),
-            'gameOver': True,
-            'winner': 'ai'
-        })
-    
-    # Check for draw
-    if len(game.get_valid_locations()) == 0:
-        return jsonify({
-            'board': game.board.tolist(),
-            'gameOver': True,
-            'winner': 'draw'
-        })
-    
-    return jsonify({
-        'board': game.board.tolist(),
-        'gameOver': False,
-        'aiMove': ai_col
-    })
+    except IndexError as e:
+        return jsonify({'error': str(e)}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8082, debug=True)
