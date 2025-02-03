@@ -218,7 +218,8 @@ def make_move():
             })
         
         # AI move
-        ai_col, _ = game.alpha_beta(5, float('-inf'), float('inf'), True)
+        ai_depth = request.json.get('aiDepth', 5)  # Default to 5 if not provided
+        ai_col, _ = game.alpha_beta(ai_depth, float('-inf'), float('inf'), True)
         ai_row = game.get_next_open_row(ai_col)
         game.drop_piece(ai_row, ai_col, AI_PIECE)
         

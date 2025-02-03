@@ -130,7 +130,10 @@ async function makeMove(col) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ column: col })
+                body: JSON.stringify({
+                    column: col,
+                    aiDepth: aiDepth
+                })
             });
             
             const data = await response.json();
