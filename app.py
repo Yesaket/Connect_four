@@ -133,24 +133,22 @@ class ConnectFour:
         return valid_locations
 
     def alpha_beta(self, depth, alpha, beta, maximizing_player):
-        valid_locations = self.get_valid_locations()
-        is_terminal = self.is_terminal_node()
-        
-        if depth == 0 or is_terminal:
-            if is_terminal:
+        # Base cases: terminal node or maximum depth reached
+        if depth == 0 or self.is_terminal_node():
+            if self.is_terminal_node():
                 if self.winning_move(AI_PIECE):
-                    return (None, 100000000000000)
+                    return None, 100000
                 elif self.winning_move(PLAYER_PIECE):
-                    return (None, -100000000000000)
+                    return None, -100000
                 else:  # Game is over, no more valid moves
-                    return (None, 0)
+                    return None, 0
             else:  # Depth is zero
-                return (None, self.score_position(AI_PIECE))
+                return None, self.score_position(AI_PIECE)
 
         if maximizing_player:
             value = float('-inf')
-            column = valid_locations[0]
-            for col in valid_locations:
+            column = self.get_valid_locations()[0]
+            for col in self.get_valid_locations():
                 row = self.get_next_open_row(col)
                 temp_board = self.board.copy()
                 self.drop_piece(row, col, AI_PIECE)
@@ -165,8 +163,8 @@ class ConnectFour:
             return column, value
         else:  # Minimizing player
             value = float('inf')
-            column = valid_locations[0]
-            for col in valid_locations:
+            column = self.get_valid_locations()[0]
+            for col in self.get_valid_locations():
                 row = self.get_next_open_row(col)
                 temp_board = self.board.copy()
                 self.drop_piece(row, col, PLAYER_PIECE)
@@ -218,8 +216,14 @@ def make_move():
             })
         
         # AI move
-        ai_depth = request.json.get('aiDepth', 5)  # Default to 5 if not provided
-        ai_col, _ = game.alpha_beta(ai_depth, float('-inf'), float('inf'), True)
+        try:
+            ai_depth = int(request.json.get('aiDepth', 5))  # Convert to int and default to 5 if not provided
+            # Ensure depth is within reasonable bounds
+            ai_depth = max(1, min(ai_depth, 8))  # Limit depth between 1 and 8
+            ai_col, minimax_score = game.alpha_beta(ai_depth, float('-inf'), float('inf'), True)
+        except (TypeError, ValueError) as e:
+            ai_depth = 5
+            ai_col, minimax_score = game.alpha_beta(ai_depth, float('-inf'), float('inf'), True)
         ai_row = game.get_next_open_row(ai_col)
         game.drop_piece(ai_row, ai_col, AI_PIECE)
         

@@ -44,7 +44,7 @@ The difficulty is controlled by the search depth in the alpha_beta function:
 ```python
 ai_col, _ = game.alpha_beta(5, float('-inf'), float('inf'), True)
 ```
-- Currently set to depth depends on the ai difficulty level. Easy being 2, Medium being 4, Hard being 6
+- Currently set to depth depends on the ai difficulty level. Easy being 1, Medium being 2, Hard being 5
 - Higher depth = stronger AI but slower decisions
 - Lower depth = weaker AI but faster decisions
 
@@ -64,6 +64,10 @@ ai_col, _ = game.alpha_beta(5, float('-inf'), float('inf'), True)
 4. **Testing Challenges**
    - Issue: Initial test structure didn't match class-based implementation
    - Solution: Refactored tests to work with ConnectFour class and added fixtures
+4. **Ai Difficulty Selection**
+   - Issue: Difficulty selection not working
+   - Solution: Implemented easy/medium/hard selection and default to medium difficulty and connect the front end to the backend.
+
 
 ## Development Time
 - Initial Implementation: ~4 hours
