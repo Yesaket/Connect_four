@@ -1,7 +1,7 @@
 # Connect Four Web Game
 
 ## Contributors
-- Yesaket
+- Yesake Teshale
 
 ## Project Overview
 A web-based implementation of the classic Connect Four game with an AI opponent. The game features a modern UI, smooth animations, and multiple AI difficulty levels.
@@ -50,7 +50,7 @@ ai_col, _ = game.alpha_beta(5, float('-inf'), float('inf'), True)
 
 ## Issues Encountered & Solutions
 1. **Animation Glitches**
-   - Issue: Pieces would disappear momentarily during drop animation
+   - Issue: Pieces would disappear momentarily during drop animation. This issue still happens momentarilly after a move
    - Solution: Improved the animation logic to maintain piece visibility throughout
 
 2. **AI Move Display**
@@ -71,10 +71,10 @@ ai_col, _ = game.alpha_beta(5, float('-inf'), float('inf'), True)
 
 ## Development Time
 - Initial Implementation: ~4 hours
-- UI Improvements: ~2 hours
-- Animation Fixes: ~2 hours
+- UI Improvements: ~1 hours
+- Animation Fixes: ~1 hours
 - Testing Implementation: ~1 hour
-- Total: ~9 hours
+- Total: ~7 hours
 
 ## Running the Project
 1. Install dependencies:
